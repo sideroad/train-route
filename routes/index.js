@@ -27,7 +27,7 @@ router.get('/route/:from/:to/:date/:time/:type/', function(req, res) {
 client.get(url, function (err, routes) {
   if(routes) {
     res.send({
-      routes: routes
+      routes: JSON.parse(routes)
     });
   } else {
     jsdom.env(
@@ -73,7 +73,7 @@ client.get(url, function (err, routes) {
           }).get();
         });
 
-        client.set( url, routes);
+        client.set( url, JSON.stringify(routes) );
         res.send({
           routes: routes
         });
