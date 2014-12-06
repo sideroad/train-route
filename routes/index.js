@@ -25,7 +25,7 @@ router.get('/route/:from/:to/:date/:time/:type/', function(req, res) {
 
 
 client.get(url, function (err, routes) {
-  if(reply) {
+  if(routes) {
     res.send({
       routes: routes
     });
