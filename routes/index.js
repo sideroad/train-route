@@ -7,6 +7,7 @@ var redisURL = url.parse(process.env.REDISCLOUD_URL);
 var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
 var superagent = require('superagent');
 var async = require('async');
+var _ = require('lodash');
 client.auth(redisURL.auth.split(":")[1]); 
 client.flushdb();
 
@@ -19,18 +20,34 @@ router.get('/nearest/:lat/:lng', function(req, res){
                   'types=subway_station|train_station&'+
                   'sensor=true&'+
                   'rankby=distance&'+
+                  'language=en&'+
+                  'key='+process.env.GOOGLE_API_KEY;
+        console.log(url);
+
+        superagent.get(url, function(placeEn){
+          callback(null, _.find(placeEn.body.results || [], function(result){
+            return /^[a-zA-Z0-9 ]+$/.test(result.name);
+          }));
+        });
+      },
+      function(placeEn, callback){
+        var url = 'https://maps.googleapis.com/maps/api/place/search/json?'+
+                  'location='+placeEn.geometry.location.lat+','+placeEn.geometry.location.lng+'&'+
+                  'types=subway_station|train_station&'+
+                  'sensor=true&'+
+                  'rankby=distance&'+
                   'language=ja&'+
                   'key='+process.env.GOOGLE_API_KEY;
         console.log(url);
 
-        superagent.get(url, function(place){
-          callback(null, place.body.results[0] || {});
+        superagent.get(url, function(placeJa){
+          callback(null, placeEn, placeJa.body.results[0] || {});
         });
       },
-      function(place, callback){
+      function(placeEn, placeJa, callback){
         var url = 'https://maps.googleapis.com/maps/api/directions/json?'+
                   'origin='+req.params.lat+','+req.params.lng+'&'+
-                  'destination='+place.geometry.location.lat+','+place.geometry.location.lng+'&'+
+                  'destination='+placeEn.geometry.location.lat+','+placeEn.geometry.location.lng+'&'+
                   'sensor=false&'+
                   'mode=walking&'+
                   'key='+process.env.GOOGLE_API_KEY;
@@ -41,7 +58,8 @@ router.get('/nearest/:lat/:lng', function(req, res){
             return sum + leg.duration.value;
           },0);
           callback(null, {
-            name: place.name.split(/\s+/).pop(),
+            name: placeJa.name.split(/\s+/).pop(),
+            nameEn: placeEn.name,
             duration: duration
           });
         });          
