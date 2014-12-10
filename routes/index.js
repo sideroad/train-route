@@ -59,7 +59,7 @@ router.get('/nearest/:lat/:lng', function(req, res){
       function(placeEn, placeJa, callback){
         var url = 'https://maps.googleapis.com/maps/api/directions/json?'+
                   'origin='+req.params.lat+','+req.params.lng+'&'+
-                  'destination='+placeEn.geometry.location.lat+','+placeEn.geometry.location.lng+'&'+
+                  'destination='+placeEn.geometry.location.lat.toFixed(4)+','+placeEn.geometry.location.lng.toFixed(4)+'&'+
                   'sensor=false&'+
                   'mode=walking&'+
                   'key='+process.env.GOOGLE_API_KEY;
