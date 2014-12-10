@@ -8,6 +8,20 @@ var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_chec
 var superagent = require('superagent');
 var async = require('async');
 var _ = require('lodash');
+var get = function(url, callback){
+  console.log(url);
+  client.get(url, function(data){
+    if(data) {
+      callback(data);
+    } else {
+      superagent.get(url, function(data){
+        client.set(url, data);
+        client.expire(url, 86400000 * 30);
+        callback(data);
+      });
+    }
+  });
+};
 client.auth(redisURL.auth.split(":")[1]); 
 client.flushdb();
 
@@ -22,9 +36,8 @@ router.get('/nearest/:lat/:lng', function(req, res){
                   'rankby=distance&'+
                   'language=en&'+
                   'key='+process.env.GOOGLE_API_KEY;
-        console.log(url);
 
-        superagent.get(url, function(placeEn){
+        get(url, function(placeEn){
           callback(null, _.find(placeEn.body.results || [], function(result){
             return /^[a-zA-Z0-9 ]+$/.test(result.name);
           }));
@@ -38,9 +51,8 @@ router.get('/nearest/:lat/:lng', function(req, res){
                   'rankby=distance&'+
                   'language=ja&'+
                   'key='+process.env.GOOGLE_API_KEY;
-        console.log(url);
 
-        superagent.get(url, function(placeJa){
+        get(url, function(placeJa){
           callback(null, placeEn, placeJa.body.results[0] || {});
         });
       },
@@ -52,8 +64,7 @@ router.get('/nearest/:lat/:lng', function(req, res){
                   'mode=walking&'+
                   'key='+process.env.GOOGLE_API_KEY;
 
-        console.log(url);
-        superagent.get(url, function(directions){
+        get(url, function(directions){
           var duration = directions.body.routes[0].legs.reduce(function(sum, leg){
             return sum + leg.duration.value;
           },0);
@@ -66,6 +77,7 @@ router.get('/nearest/:lat/:lng', function(req, res){
       }
     ], function(err, json){
         res.json(json);
+        res.end();
     });
   } catch (err){
     console.log(err);
@@ -150,9 +162,11 @@ router.get('/route/:from/:to/:date/:time/:sort/:type/', function(req, res) {
             });
 
             client.set( url, JSON.stringify(routes) );
+            client.expire( url, 86400000);
             res.json({
               routes: routes
             });
+            res.end();
           }
         );
       }
