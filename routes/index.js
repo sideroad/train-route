@@ -30,7 +30,7 @@ router.get('/nearest/:lat/:lng', function(req, res){
     async.waterfall([
       function(callback){
         var url = 'https://maps.googleapis.com/maps/api/place/search/json?'+
-                  'location='+req.params.lat+','+req.params.lng+'&'+
+                  'location='+req.params.lat.toFixed(3)+','+req.params.lng.toFixed(3)+'&'+
                   'types=subway_station|train_station&'+
                   'sensor=true&'+
                   'rankby=distance&'+
@@ -45,7 +45,7 @@ router.get('/nearest/:lat/:lng', function(req, res){
       },
       function(placeEn, callback){
         var url = 'https://maps.googleapis.com/maps/api/place/search/json?'+
-                  'location='+placeEn.geometry.location.lat+','+placeEn.geometry.location.lng+'&'+
+                  'location='+placeEn.geometry.location.lat.toFixed(3)+','+placeEn.geometry.location.lng.toFixed(3)+'&'+
                   'types=subway_station|train_station&'+
                   'sensor=true&'+
                   'rankby=distance&'+
