@@ -30,7 +30,7 @@ router.get('/nearest/:lat/:lng', function(req, res){
     async.waterfall([
       function(callback){
         var url = 'https://maps.googleapis.com/maps/api/place/search/json?'+
-                  'location='+req.params.lat.toFixed(3)+','+req.params.lng.toFixed(3)+'&'+
+                  'location='+Number(req.params.lat).toFixed(3)+','+Number(req.params.lng).toFixed(3)+'&'+
                   'types=subway_station|train_station&'+
                   'sensor=true&'+
                   'rankby=distance&'+
