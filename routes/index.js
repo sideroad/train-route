@@ -24,6 +24,8 @@ var get = function(url, callback){
 };
 client.auth(redisURL.auth.split(":")[1]); 
 client.flushdb();
+var crypto = require('crypto');
+
 
 router.get('/nearest/:lat/:lng', function(req, res){
   try {
@@ -159,6 +161,10 @@ router.get('/route/:from/:to/:date/:time/:sort/:type/', function(req, res) {
                   steps:  Number($access.find('.btnStopNum').text().replace(/駅/g, ''))||1
                 };
               }).get();
+
+              var md5 = crypto.createHash('md5');
+              md5.update(JSON.stringify(routes),'utf8');
+              routes[index].id = md5.digest('hex');
             });
 
             client.set( url, JSON.stringify(routes) );
