@@ -8,6 +8,14 @@ var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_chec
 var superagent = require('superagent');
 var async = require('async');
 var _ = require('lodash');
+var ignore = [
+  'ChIJ93NBFRh9GGARjH88N0VO3ms', //ベイサイドステーション駅・舞浜リゾートライン／ディズニーリゾートラ
+  'ChIJd3RBFRh9GGARZe607wjJjJM', //ベイサイド・ステーション駅
+  'ChIJ7-y9RhR9GGARwgKYxSeXAtY', //東京ディズニーランド・ステーション駅
+  'ChIJyZK9RhR9GGARxhCU3-o_rWY', //東京ディズニーランドステーション駅・舞浜リゾートライン／ディズニーリゾートライン
+  'ChIJ41TW0BF9GGARxRxNrNtkbQ8', //リゾートゲートウェイ・ステーション駅
+  'ChIJm1TW0BF9GGARiGwkskKVafg', //リゾートゲートウェイステーション駅・舞浜リゾートライン／ディズニーリゾートライン  
+];
 var get = function(url, callback){
   console.log(url);
   client.get(url, function(data){
@@ -43,7 +51,7 @@ router.get('/nearest/:lat/:lng', function(req, res){
 
         get(url, function(placeJa){
           callback(null, _.find(placeJa.body.results || [], function(result){
-            return !/（株）/.test(result.name);
+            return !/（株）/.test(result.name) && ignore.indexOf(result.place_id) === -1;
           }));
         });
       },
