@@ -167,12 +167,9 @@ router.get('/route/:from/:to/:date/:time/:sort/:type/', function(req, res) {
             });
 
             res.json({
-              from: results[0].name,
-              to: results[1].name,
               routes: routes
             });
             res.end();
-
           }
         );
       }
