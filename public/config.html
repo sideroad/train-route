@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/handlebars-v2.0.0.js"></script>
+</head>
+<body>
+
+  <div id="main" role="main" class="ui-content jqm-content">
+
+      <ul data-role="listview" data-inset="true" id="stations">
+<!--           <li data-icon="delete"><a href="#">{{this}}</a></li> -->
+      </ul>
+      <input type="text" name="textinput-hide" id="station" placeholder="Station name" value="">
+      <button class="ui-shadow ui-btn ui-corner-all" id="station-add" >Add</button>
+
+      <div class="ui-grid-a">
+          <div class="ui-block-a">
+            Departure
+            <select name="select-choice-1" id="departure">
+          <!--     <option>{{this}}</option> -->
+            </select>
+          </div>
+          <div class="ui-block-b">
+            Arrival
+            <select name="select-choice-1" id="arrival">
+          <!--     <option>{{this}}</option> -->
+            </select>
+          </div>
+      </div>
+
+      <button class="ui-shadow ui-btn ui-corner-all" id="submit" >Submit</button>
+  </div>
+  <script src="js/index.js"></script>
+  <script src="js/jquery.mobile-1.4.5.min.js"></script>
+</body>
+</html>
