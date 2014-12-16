@@ -1,6 +1,7 @@
 
 
 $(function(){
+  alert(document.location.href);
   var data = {
     stations: ['品川シーサイド', '船橋法典', '舞浜'],
     roundtrip: ['品川シーサイド', '船橋法典']
