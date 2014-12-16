@@ -1,7 +1,7 @@
 
 
 $(function(){
-  var data = JSON.parse(decodeURIComponent(document.location.hash.substr(1))) || {
+  var data = JSON.parse(decodeURIComponent(document.location.hash.substr(1))||'{}') || {
     stations: ['品川シーサイド', '船橋法典', '舞浜'],
     roundtrip: ['品川シーサイド', '船橋法典']
   };
