@@ -51,7 +51,7 @@ router.get('/nearest/:lat/:lng', function(req, res){
 
         get(url, function(placeJa){
           callback(null, _.find(placeJa.body.results || [], function(result){
-            return !/（株）/.test(result.name) && ignore.indexOf(result.place_id) === -1;
+            return !/(（株）|／)/.test(result.name) && ignore.indexOf(result.place_id) === -1;
           }));
         });
       },
