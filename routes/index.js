@@ -99,11 +99,9 @@ router.get('/route/:from/:to/:date/:time/:sort/:type/', function(req, res) {
               'ws=1',
         parse = function(url, callback){
                   console.log(url);
-                  client.get(url, function (err, routes) {
-                    if(routes) {
-                      res.json({
-                        routes: JSON.parse(routes)
-                      });
+                  client.get(url, function (err, cached) {
+                    if(cached) {
+                      callback(null, cached.routes, cached.nextUrl);
                     } else {
                       jsdom.env(
                         url,
@@ -157,7 +155,10 @@ router.get('/route/:from/:to/:date/:time/:sort/:type/', function(req, res) {
 
                           nextUrl = $('.navSearchAround li.next a').attr('href');
 
-                          client.set( url, JSON.stringify(routes) );
+                          client.set( url, JSON.stringify({
+                            nextUrl: nextUrl,
+                            routes: routes
+                          }));
                           client.expire( url, 86400000);
                           callback(null, routes, nextUrl);
                         }
