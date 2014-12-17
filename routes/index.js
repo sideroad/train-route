@@ -101,6 +101,7 @@ router.get('/route/:from/:to/:date/:time/:sort/:type/', function(req, res) {
                   console.log(url);
                   client.get(url, function (err, cached) {
                     if(cached) {
+                      cached = JSON.parse(cached);
                       callback(cached.routes, cached.nextUrl);
                     } else {
                       console.log(url);
