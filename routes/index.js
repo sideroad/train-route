@@ -98,6 +98,7 @@ router.get('/route/:from/:to/:date/:time/:sort/:type/', function(req, res) {
               'expkind=1&'+
               'ws=1',
         parse = function(url, callback){
+                  console.log(url);
                   client.get(url, function (err, routes) {
                     if(routes) {
                       res.json({
@@ -165,7 +166,6 @@ router.get('/route/:from/:to/:date/:time/:sort/:type/', function(req, res) {
                   });
                 };
 
-    console.log(url);
 
     async.waterfall([
       function(callback){
