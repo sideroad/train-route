@@ -175,16 +175,16 @@ router.get('/route/:from/:to/:date/:time/:sort/:type/', function(req, res) {
           callback(null, routes, nextUrl);
         });
       },
-      function(routes, url, callback){
-        parse(url, function(_routes, nextUrl){
-          callback(null, routes.concat(_routes), nextUrl);
-        });
-      },
-      function(routes, url, callback){
-        parse(url, function(_routes, nextUrl){
-          callback(null, routes.concat(_routes), nextUrl);
-        });
-      },
+      // function(routes, url, callback){
+      //   parse(url, function(_routes, nextUrl){
+      //     callback(null, routes.concat(_routes), nextUrl);
+      //   });
+      // },
+      // function(routes, url, callback){
+      //   parse(url, function(_routes, nextUrl){
+      //     callback(null, routes.concat(_routes), nextUrl);
+      //   });
+      // },
     ], function(err, routes, nextUrl){
       res.set({
         'Access-Control-Allow-Origin':'*',
