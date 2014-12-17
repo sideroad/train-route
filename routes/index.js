@@ -103,6 +103,7 @@ router.get('/route/:from/:to/:date/:time/:sort/:type/', function(req, res) {
                     if(cached) {
                       callback(cached.routes, cached.nextUrl);
                     } else {
+                      console.log(url);
                       jsdom.env(
                         url,
                         ['http://code.jquery.com/jquery.js'],
