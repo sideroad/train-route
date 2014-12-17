@@ -154,7 +154,7 @@ router.get('/route/:from/:to/:date/:time/:sort/:type/', function(req, res) {
                             routes[index].id = md5.digest('hex');
                           });
 
-                          nextUrl = $('.navSearchAround li.next a').attr('href');
+                          nextUrl = 'http://transit.loco.yahoo.co.jp'+$('.navSearchAround li.next a').attr('href');
 
                           client.set( url, JSON.stringify({
                             nextUrl: nextUrl,
