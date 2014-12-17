@@ -101,7 +101,7 @@ router.get('/route/:from/:to/:date/:time/:sort/:type/', function(req, res) {
                   console.log(url);
                   client.get(url, function (err, cached) {
                     if(cached) {
-                      callback(null, cached.routes, cached.nextUrl);
+                      callback(cached.routes, cached.nextUrl);
                     } else {
                       jsdom.env(
                         url,
@@ -160,7 +160,7 @@ router.get('/route/:from/:to/:date/:time/:sort/:type/', function(req, res) {
                             routes: routes
                           }));
                           client.expire( url, 86400000);
-                          callback(null, routes, nextUrl);
+                          callback( routes, nextUrl);
                         }
                       );
                     }
